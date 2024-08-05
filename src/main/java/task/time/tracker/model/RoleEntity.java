@@ -45,7 +45,13 @@ public class RoleEntity {
 	@CreationTimestamp
 	private LocalDateTime createdAt;
 
+	@Column(name = "created_by")
+	private String createdBy;
+
 	@UpdateTimestamp
 	private LocalDateTime updatedAt;
+
+	@Column(name = "updated_by")
+	private String updatedBy;
 
 }

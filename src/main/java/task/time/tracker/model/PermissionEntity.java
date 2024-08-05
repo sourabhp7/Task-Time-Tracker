@@ -27,7 +27,7 @@ public class PermissionEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "role_name")
+	@Column(name = "permission_name")
 	private String permissonName;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.permission", cascade = CascadeType.ALL)
@@ -39,6 +39,12 @@ public class PermissionEntity {
 	@CreationTimestamp
 	private LocalDateTime createdAt;
 
+	@Column(name = "created_by")
+	private String createdBy;
+
 	@UpdateTimestamp
 	private LocalDateTime updatedAt;
+
+	@Column(name = "updated_by")
+	private String updatedBy;
 }

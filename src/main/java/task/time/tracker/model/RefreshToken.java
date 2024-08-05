@@ -1,46 +1,47 @@
 package task.time.tracker.model;
 
+import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Data
+@Table
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user_entity")
-public class UserEntity {
+@Data
+public class RefreshToken implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "user_name")
-	private String userName;
+	@OneToOne
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	private UserEntity userEntity;
 
-	@Column(name = "password")
-	private String password;
+	@Column(nullable = false, unique = true)
+	private String token;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.userEntity", cascade = CascadeType.ALL)
-	private List<UserRoleEntity> userRole;
-
-	@Column(name = "is_active")
-	private Boolean isActive = true;
+	@Column(nullable = false)
+	private Instant expiryDate;
 
 	@CreationTimestamp
 	private LocalDateTime createdAt;

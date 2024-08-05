@@ -4,8 +4,11 @@ import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -13,12 +16,19 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import task.time.tracker.model.UserEntity;
+import task.time.tracker.repository.UserEntityRepository;
 
 @Component
 public class JwtUtils {
 
-	public static final String SECRET_KEY = "yv+/52FoFMRh2w1zTV/22HmiNmLt6FddAMLKdqwTq3VDthEtxcr541OdjPu47dAz\r\n"
-			+ "";
+	public static final String SECRET_KEY = "yv+/52FoFMRh2w1zTV/22HmiNmLt6FddAMLKdqwTq3VDthEtxcr541OdjPu47dAz\r\n" + "";
+
+	@Value("${app.jwtExpirationMs}")
+	private int jwtExpirationMs;
+
+	@Autowired
+	private UserEntityRepository userEntityRepository;
 
 	public String extractUsernameFromToken(String jwtToken) {
 
@@ -26,10 +36,14 @@ public class JwtUtils {
 
 	}
 
-	public String generateJwtToken(String email) {
-		return Jwts.builder().setIssuer("Deepak").setSubject(email).setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis())).claim(email, email)
-				.signWith(getKey(), SignatureAlgorithm.HS256).compact();
+	public String generateJwtToken(String username) {
+
+		final Optional<UserEntity> userEntity = userEntityRepository.findByUserName(username);
+		return Jwts.builder().setIssuer("Task").setSubject(userEntity.get().getUserName())
+				.setIssuedAt(new Date(System.currentTimeMillis()))
+				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+				.claim("username", userEntity.get().getUserName()).signWith(getKey(), SignatureAlgorithm.HS256)
+				.compact();
 	}
 
 	public <T> T extractClam(String token, Function<Claims, T> claimResover) {

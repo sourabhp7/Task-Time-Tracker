@@ -36,19 +36,19 @@ public class UserPrincipalService implements UserDetails {
 
 			});
 		});
-		return null;
+		return authorities;
 	}
 
 	@Override
 	public String getPassword() {
 
-		return userDTO.getUserName();
+		return userDTO.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
 
-		return userDTO.getPassword();
+		return userDTO.getUserName();
 	}
 
 }

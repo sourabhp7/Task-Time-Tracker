@@ -34,4 +34,6 @@ public class RolePermissionEntity {
 
 	@UpdateTimestamp
 	private LocalDateTime updatedAt;
+	
+	
 }
