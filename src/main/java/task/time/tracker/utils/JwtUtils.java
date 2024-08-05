@@ -39,7 +39,7 @@ public class JwtUtils {
 	public String generateJwtToken(String username) {
 
 		final Optional<UserEntity> userEntity = userEntityRepository.findByUserName(username);
-		return Jwts.builder().setIssuer("Task").setSubject(userEntity.get().getUserName())
+		return Jwts.builder().setIssuer("Task-Tracker").setSubject(userEntity.get().getUserName())
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
 				.claim("username", userEntity.get().getUserName()).signWith(getKey(), SignatureAlgorithm.HS256)
