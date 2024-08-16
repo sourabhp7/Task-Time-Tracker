@@ -13,16 +13,20 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import task.time.tracker.dto.JwtResponse;
 import task.time.tracker.dto.LoginRequest;
+import task.time.tracker.dto.TokenRefreshRequest;
+import task.time.tracker.dto.TokenRefreshResponse;
+import task.time.tracker.exception.TokenRefreshException;
 import task.time.tracker.model.RefreshToken;
 
 import task.time.tracker.service.RefreshTokenService;
+import task.time.tracker.service.RefreshTokenServiceImpl;
 import task.time.tracker.service.UserPrincipalService;
 import task.time.tracker.utils.JwtUtils;
 
@@ -38,7 +42,7 @@ public class AuthController {
 	private JwtUtils jwtUtils;
 
 	@Autowired
-	private RefreshTokenService refreshTokenService;
+	private RefreshTokenServiceImpl refreshTokenService;
 
 	@PostMapping("/login")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -59,5 +63,17 @@ public class AuthController {
 		final RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getUsername());
 
 		return ResponseEntity.ok(new JwtResponse(jwt, "Bearer", refreshToken.getToken()));
+	}
+
+	@PostMapping("/refreshtoken")
+	public ResponseEntity<?> refreshtoken(@Valid @RequestBody TokenRefreshRequest request) {
+		final String requestRefreshToken = request.getRefreshToken();
+
+		return refreshTokenService.findByToken(requestRefreshToken).map(refreshTokenService::verifyExpiration)
+				.map(RefreshToken::getUserEntity).map(user -> {
+					final String token = jwtUtils.generateJwtToken(user.getUserName());
+					return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
+				})
+				.orElseThrow(() -> new TokenRefreshException(requestRefreshToken, "Refresh token is not in database!"));
 	}
 }

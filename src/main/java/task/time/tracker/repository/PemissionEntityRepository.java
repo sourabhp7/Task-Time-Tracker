@@ -10,6 +10,6 @@ import task.time.tracker.model.PermissionEntity;
 @Repository
 public interface PemissionEntityRepository extends JpaRepository<PermissionEntity, Long> {
 
-	Optional<PermissionEntity> findByPermissonNameContainingIgnoreCase(String permissionName);
+	Optional<PermissionEntity> findByPermissonNameIgnoreCase(String permissionName);
 
 }

@@ -28,6 +28,9 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 	@Value("${app.jwtRefreshExpirationMs}")
 	private Long refreshTokenDurationMs;
 
+	public Optional<RefreshToken> findByToken(String token) {
+	    return refreshTokenRepository.findByToken(token);
+	  }
 	@Override
 	public RefreshToken createRefreshToken(String username) {
 		RefreshToken refreshToken = new RefreshToken();

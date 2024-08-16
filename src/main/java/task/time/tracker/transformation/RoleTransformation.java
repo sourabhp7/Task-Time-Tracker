@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import task.time.tracker.dto.RoleDTO;
 import task.time.tracker.dto.RoleRequest;
+import task.time.tracker.exception.ResourceNotFound;
 import task.time.tracker.model.RoleEntity;
 import task.time.tracker.repository.RoleEntityRepository;
 
@@ -30,7 +31,7 @@ public class RoleTransformation {
 		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		final String userName = auth.getName();
 		if (task.time.tracker.constant.Operation.MODIFIED.value().equalsIgnoreCase(Operation)) {
-			roleEntity = roleEntityRepository.findById(roleRequest.getId()).get();
+			roleEntity = roleEntityRepository.findById(roleRequest.getId()).orElseThrow(()-> new ResourceNotFound("Role Id Not Found "));
 
 		}
 		if (roleEntity == null) {
@@ -48,5 +49,12 @@ public class RoleTransformation {
 		}
 
 		return roleEntity;
+	}
+	
+	public RoleRequest entityToRoleRequest(RoleEntity roleEntity) {
+		RoleRequest roleDTO = new RoleRequest();
+		roleDTO.setId(roleEntity.getId());
+		roleDTO.setRoleName(roleEntity.getRoleName());
+		return roleDTO;
 	}
 }

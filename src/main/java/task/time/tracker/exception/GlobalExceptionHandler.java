@@ -15,18 +15,19 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 
-@ControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+@RestControllerAdvice
+public class GlobalExceptionHandler {
 
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-			HttpHeaders headers, HttpStatus status, WebRequest request) {
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
 
 		final ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST);
 		apiError.setMessage("Missing Or Invalid Data");
@@ -56,7 +57,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(ResourceNotFound.class)
 	public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFound ex) {
-		final ApiError apiError = ex.getApiError();
+		final ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
 		return buildResponseEntity(apiError);
 	}
 

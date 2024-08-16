@@ -24,5 +24,6 @@ public class SuccessResponse implements Serializable {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	private LocalDateTime timestamp;
 	private String message;
+	private Object data;
 
 }

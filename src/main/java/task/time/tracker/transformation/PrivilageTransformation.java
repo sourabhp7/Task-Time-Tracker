@@ -12,6 +12,7 @@ import task.time.tracker.dto.PermissionRequest;
 import task.time.tracker.dto.PrivilageDTO;
 import task.time.tracker.dto.RoleDTO;
 import task.time.tracker.dto.RoleRequest;
+import task.time.tracker.exception.ResourceNotFound;
 import task.time.tracker.model.PermissionEntity;
 import task.time.tracker.model.RoleEntity;
 import task.time.tracker.repository.PemissionEntityRepository;
@@ -34,7 +35,8 @@ public class PrivilageTransformation {
 		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		final String userName = auth.getName();
 		if (task.time.tracker.constant.Operation.MODIFIED.value().equalsIgnoreCase(Operation)) {
-			permissionEntity = pemissionEntityRepository.findById(permissionRequest.getId()).get();
+			permissionEntity = pemissionEntityRepository.findById(permissionRequest.getId())
+					.orElseThrow(() -> new ResourceNotFound("Permission Id Not Found"));
 
 		}
 		if (permissionEntity == null) {
@@ -52,5 +54,12 @@ public class PrivilageTransformation {
 		}
 
 		return permissionEntity;
+	}
+
+	public PermissionRequest entityToPermissionRequest(PermissionEntity permissionEntity) {
+		PermissionRequest permissionRequest = new PermissionRequest();
+		permissionRequest.setId(permissionEntity.getId());
+		permissionRequest.setPermissionName(permissionEntity.getPermissonName());
+		return permissionRequest;
 	}
 }

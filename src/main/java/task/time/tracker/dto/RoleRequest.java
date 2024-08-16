@@ -15,7 +15,5 @@ public class RoleRequest {
 	private Long id;
 
 	@NotBlank(message = "Please Enter RoleName")
-	@NotEmpty(message = "Please Enter RoleName")
-	@NotNull(message = "Please Enter RoleName")
 	private String roleName;
 }

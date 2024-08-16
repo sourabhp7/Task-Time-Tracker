@@ -15,7 +15,5 @@ public class PermissionRequest {
 	private Long id;
 	
 	@NotBlank(message = "Please Enter PermissionName")
-	@NotEmpty(message = "Please Enter PermissionName")
-	@NotNull(message = "Please Enter PermissionName")
 	private String permissionName;
 }
