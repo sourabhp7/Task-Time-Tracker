@@ -24,7 +24,7 @@ import task.time.tracker.dto.TokenRefreshRequest;
 import task.time.tracker.dto.TokenRefreshResponse;
 import task.time.tracker.exception.TokenRefreshException;
 import task.time.tracker.model.RefreshToken;
-
+import task.time.tracker.service.EmailService;
 import task.time.tracker.service.RefreshTokenService;
 import task.time.tracker.service.RefreshTokenServiceImpl;
 import task.time.tracker.service.UserPrincipalService;
@@ -43,6 +43,9 @@ public class AuthController {
 
 	@Autowired
 	private RefreshTokenServiceImpl refreshTokenService;
+	
+	@Autowired
+	private EmailService emailService;
 
 	@PostMapping("/login")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -61,6 +64,9 @@ public class AuthController {
 		LOGGER.info("UserType is: " + roles.get(0));
 
 		final RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getUsername());
+		
+		
+        emailService.sendEmail("beherad592@gmail.com", "Login Successful", "You have successfully logged in.");
 
 		return ResponseEntity.ok(new JwtResponse(jwt, "Bearer", refreshToken.getToken()));
 	}
