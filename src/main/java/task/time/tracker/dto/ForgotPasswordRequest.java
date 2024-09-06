@@ -2,7 +2,6 @@ package task.time.tracker.dto;
 
 import java.io.Serializable;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;

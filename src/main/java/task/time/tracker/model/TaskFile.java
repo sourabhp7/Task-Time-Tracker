@@ -1,7 +1,5 @@
 package task.time.tracker.model;
 
-import java.io.Serializable;
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,38 +7,45 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class RefreshToken implements Serializable {
-
-	private static final long serialVersionUID = 1L;
-
+public class TaskFile {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id", referencedColumnName = "id")
-	private UserEntity userEntity;
-
-	@Column(nullable = false, unique = true)
-	private String token;
+	@Column(nullable = false)
+	private String fileName;
 
 	@Column(nullable = false)
-	private Instant expiryDate;
+	private String fileType;
+
+	@Lob
+	@Column(nullable = false)
+	private byte[] data;
+
+	@Column(nullable = false)
+	private Long fileSize;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "task_id", nullable = false)
+	private TaskEntity taskEntity;
+
+	@Column(name = "is_active")
+	private Boolean isActive = true;
 
 	@CreationTimestamp
 	private LocalDateTime createdAt;
@@ -53,5 +58,4 @@ public class RefreshToken implements Serializable {
 
 	@Column(name = "updated_by")
 	private String updatedBy;
-
 }

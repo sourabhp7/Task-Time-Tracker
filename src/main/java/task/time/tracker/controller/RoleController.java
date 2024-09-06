@@ -2,7 +2,6 @@ package task.time.tracker.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import task.time.tracker.constant.Operation;
-import task.time.tracker.dto.PermissionRequest;
 import task.time.tracker.dto.RoleRequest;
 import task.time.tracker.dto.SuccessResponse;
 import task.time.tracker.exception.ApiError;

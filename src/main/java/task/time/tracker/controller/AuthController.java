@@ -16,11 +16,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-
 
 import jakarta.validation.Valid;
 import task.time.tracker.config.AppSettings;
@@ -37,7 +34,6 @@ import task.time.tracker.exception.TokenRefreshException;
 import task.time.tracker.model.RefreshToken;
 import task.time.tracker.service.EmailService;
 import task.time.tracker.service.ForgotPasswordService;
-import task.time.tracker.service.RefreshTokenService;
 import task.time.tracker.service.RefreshTokenServiceImpl;
 import task.time.tracker.service.UserEntityService;
 import task.time.tracker.service.UserPrincipalService;
@@ -86,9 +82,6 @@ public class AuthController {
 		LOGGER.info("UserType is: " + roles.get(0));
 
 		final RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getUsername());
-
-		emailService.sendEmail("beherad592@gmail.com", "Login Successful", "You have successfully logged in.");
-
 		return ResponseEntity.ok(new JwtResponse(jwt, "Bearer", refreshToken.getToken()));
 	}
 

@@ -5,7 +5,6 @@ import java.util.Objects;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

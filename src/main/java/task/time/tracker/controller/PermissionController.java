@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import task.time.tracker.constant.Operation;
 import task.time.tracker.dto.PermissionRequest;
-import task.time.tracker.dto.RoleRequest;
 import task.time.tracker.dto.SuccessResponse;
 import task.time.tracker.exception.ApiError;
 import task.time.tracker.model.PermissionEntity;

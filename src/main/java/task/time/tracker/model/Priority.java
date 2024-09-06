@@ -5,26 +5,28 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.AssociationOverride;
-import jakarta.persistence.AssociationOverrides;
 import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "priority")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@AssociationOverrides({ @AssociationOverride(name = "pk.role", joinColumns = @JoinColumn(name = "role_id")),
-@AssociationOverride(name = "pk.permission", joinColumns = @JoinColumn(name = "permission_id")) })
-public class RolePermissionEntity {
+public class Priority {
 
-	@EmbeddedId
-	private RolePermissionId pk = new RolePermissionId();
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	private String name;
 
 	@Column(name = "is_active")
 	private Boolean isActive = true;
@@ -32,8 +34,13 @@ public class RolePermissionEntity {
 	@CreationTimestamp
 	private LocalDateTime createdAt;
 
+	@Column(name = "created_by")
+	private String createdBy;
+
 	@UpdateTimestamp
 	private LocalDateTime updatedAt;
-	
-	
+
+	@Column(name = "updated_by")
+	private String updatedBy;
+
 }
