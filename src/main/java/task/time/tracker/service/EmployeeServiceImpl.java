@@ -3,6 +3,7 @@ package task.time.tracker.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import task.time.tracker.dto.EmployeeDTO;
@@ -14,8 +15,10 @@ import task.time.tracker.transformation.EmployeeTransformation;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
+	@Autowired
 	private EmployeeRepository employeeRepository;
 
+	@Autowired
 	private EmployeeTransformation employeeTransformation;
 
 	@Override
@@ -56,6 +59,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 		Employee employee = employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFound("idnotfound"));
 		employeeRepository.deleteById(employee.getId());
 
+	}
+
+	@Override
+	public boolean isRegistrationNoExitsWhileUpdate(String resgistrationNo, Long id) {
+		int count= employeeRepository.isRegistrationNoExitsWhileUpdate(resgistrationNo,id);
+		if(count > 0) {
+			return true;
+		}
+		return false;
 	}
 
 }

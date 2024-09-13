@@ -3,6 +3,7 @@ package task.time.tracker.transformation;
 import java.time.LocalDateTime;
 
 import org.apache.catalina.authenticator.SpnegoAuthenticator.AuthenticateAction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import task.time.tracker.repository.EmployeeRepository;
 @Component
 public class EmployeeTransformation {
 	
+	@Autowired
 	private EmployeeRepository employeeRepository;
 
 	public EmployeeDTO entityToObject(Employee employee) {
@@ -53,6 +55,7 @@ public class EmployeeTransformation {
 		employee.setAddress(employeeDTO.getAddress());
 		employee.setBloodGroup(employeeDTO.getBloodGroup());
 		employee.setDateOfBirth(employeeDTO.getDateOfBirth());
+		employee.setMobileNo(employeeDTO.getMobileNo());
 		employee.setCity(employeeDTO.getCity());
 		employee.setResgistrationNo(employeeDTO.getResgistrationNo());
 		employee.setImageUrl(employeeDTO.getImageUrl());

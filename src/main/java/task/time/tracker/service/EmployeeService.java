@@ -17,4 +17,6 @@ public interface EmployeeService {
 	
 	public void deleteById(Long id);
 
+	public boolean isRegistrationNoExitsWhileUpdate(String resgistrationNo, Long id);
+
 }
